@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { fetchProducts, addToCart } from '../endpoints/Services'; // Import addToCart function
+import { fetchProducts } from '../endpoints/Services';
+import {useCartStore} from '../utils/cartUtils';
 
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
+  const addToCart = useCartStore((state) => state.addToCart); 
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -21,15 +23,6 @@ const Products = () => {
 
     loadProducts();
   }, []);
-
-  const handleAddToCart = async (productId) => {
-    try {
-      await addToCart(productId); // Call the addToCart function
-      alert('Product added to cart successfully!');
-    } catch (err) {
-      // alert('Failed to add product to cart. Please try again.');
-    }
-  };
 
   if (loading) {
     return <div className="text-center mt-10 text-lg">Loading products...</div>;
@@ -77,8 +70,8 @@ const Products = () => {
                     ${Number(product.price).toFixed(2)}
                   </p>
                   <button
-                    onClick={() => handleAddToCart(product.id)} // Add onClick handler
-                    className="w-full bg-black text-white py-2 rounded hover:bg-gray-800 transition"
+                    onClick={() => addToCart(product)} // Zustand-based cart update
+                    className="bg-black text-white py-2 px-6 rounded hover:bg-gray-800 transition"
                   >
                     Add to Cart
                   </button>

@@ -81,3 +81,81 @@ export async function loginUser(loginData) {
     }
   }
   
+
+/**
+ * Fetch the current user's profile from the backend.
+ * @returns {Promise<Object>} - The user's profile data.
+ */
+export async function fetchUserProfile() {
+  const accessToken = localStorage.getItem('accessToken');  // Retrieve the token from storage (adjust if necessary)
+  
+  if (!accessToken) {
+    throw new Error('Access token is missing');
+  }
+
+  const apiUrl = `${baseUrl}/api/auth/profile/`;
+
+  try {
+    const response = await fetch(apiUrl, {
+      method: 'GET',
+      credentials: 'include', // Important to send cookies/session
+      headers: {
+        Authorization: `Bearer ${accessToken}`, // Use the token in the Authorization header
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Error: ${response.status} - ${JSON.stringify(errorData)}`);
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error('Failed to fetch user profile:', error);
+    throw error;
+  }
+}
+
+/**
+ * Update the user's profile with new data.
+ * @param {Object} profileData - New profile details (telephone and location).
+ * @returns {Promise<Object>} - The updated profile data.
+ */
+export async function updateUserProfile(profileData) {
+  const accessToken = localStorage.getItem('accessToken');
+
+  if (!accessToken) {
+    throw new Error('Access token is missing');
+  }
+
+  const apiUrl = `${baseUrl}/api/auth/profile/`;
+
+  // Only pick telephone and location
+  const { telephone, location } = profileData;
+
+  try {
+    const response = await fetch(apiUrl, {
+      method: 'PUT',
+      credentials: 'include',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ telephone, location }), // Only send necessary fields
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Error: ${response.status} - ${JSON.stringify(errorData)}`);
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error('Failed to update user profile:', error);
+    throw error;
+  }
+}
+

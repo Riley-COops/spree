@@ -39,7 +39,7 @@ export async function fetchCategories() {
  */
 export async function fetchProducts() {
   try {
-    const response = await axiosInstance.get('/service/products/');
+    const response = await axiosInstance.get('/service/products-list/');
     return response.data;
   } catch (error) {
     throw new Error(`Failed to fetch products: ${error.response?.statusText || error.message}`);
@@ -61,63 +61,59 @@ export async function fetchProductById(productId) {
   }
 }
 
-/**
- * Fetch all cart items.
- * @returns {Promise<Object[]>} List of cart items.
- */
-export async function fetchCart() {
-  try {
-    const response = await axiosInstance.get('/service/cart/');
-    const data = response.data.map((item) => ({
-      ...item,
-      product: {
-        ...item.product,
-        price: typeof item.product?.price === 'number' ? item.product.price : 0, // Ensure price is a number
-      },
-    }));
-    return data;
-  } catch (error) {
-    console.error('Error fetching cart:', error.response?.data || error.message);
-    throw new Error('Failed to fetch cart');
-  }
-}
+
 
 /**
- * Add a product to the cart.
- * @param {number} product - The ID of the product to add to the cart.
- * @param {number} [quantity=1] - The quantity of the product to add to the cart.
- * @returns {Promise<void>}
+ * Create a new delivery address.
+ * @param {Object} deliveryData - Data for the new delivery.
+ * @returns {Promise<Object>} - The created delivery data.
  */
-export async function addToCart(product, quantity = 1) {
+export async function createDelivery(deliveryData) {
   try {
-    const response = await axiosInstance.post('/service/cart/', {
-      product: product, // Use the correct key
-      quantity: quantity,
-    });
-    console.log('Product added to cart successfully:', response.data);
+    const response = await axiosInstance.post('/service/deliveries/create/', deliveryData);
     return response.data;
   } catch (error) {
-    console.error(
-      `Failed to add product to cart: ${error.response?.status} - ${error.response?.data}`
-    );
-    throw new Error(
-      `Failed to add product to cart: ${error.response?.statusText || error.message}`
-    );
+    throw new Error(`Failed to create delivery: ${error.response?.statusText || error.message}`);
   }
-}
+};
+
+
+
+// export async function fetchDeliveryDetails() {
+//   try {
+//     const response = await axiosInstance.get('/service/delivery-data/');
+//     return response.data;  // This will contain the saved delivery information
+//   } catch (error) {
+//     throw new Error(`Failed to fetch delivery data: ${error.response?.statusText || error.message}`);
+//   }
+// }
+
+
+
 
 /**
  * Fetch all deliveries.
  * @returns {Promise<Object[]>} List of deliveries.
  */
-export async function fetchDeliveries() {
+export async function fetchDeliveryDetails() {
   try {
-    const response = await axiosInstance.get('/service/deliveries/');
+    const response = await axiosInstance.get('/service/delivery-data/');
     return response.data;
   } catch (error) {
     throw new Error(`Failed to fetch deliveries: ${error.response?.statusText || error.message}`);
   }
 }
+
+export async function createOrder(orderData) {
+  try{
+    const response = await axiosInstance.post('/service/orders/', orderData);
+    return response.data;
+  } catch (error){
+    throw new Error(`Failed to create order: ${error.response?.statusText || error.message}`);
+  }
+
+}
+
 
 /**
  * Fetch all orders.
