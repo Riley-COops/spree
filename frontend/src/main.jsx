@@ -10,6 +10,10 @@ import Signup from './pages/Signup.jsx'
 import Products from './components/Product.jsx'
 import ProductDetails from './components/ProductDetails.jsx'
 import Cart from './pages/Cart.jsx'
+import ProfilePage from './pages/Profile.jsx'
+import ProtectedRoute from './utils/ProtectedRoute.jsx'
+import Checkout from './components/Checkout.jsx'
+
 const Router = () => {
   return (
     <>
@@ -19,9 +23,11 @@ const Router = () => {
           <Route path="/" element={<App />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/products" element={<Products />} />
+          <Route path="/products" element={<Products /> } />
           <Route path="/products/:id" element={<ProductDetails />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute> } />
+          <Route path='/checkout' element={<Checkout />}/>
           {/* <Route path="/notification" element={<Notification />} /> */}
         </Routes>
       </BrowserRouter>

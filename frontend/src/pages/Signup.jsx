@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
+import { Link, useNavigate,useLocation } from 'react-router-dom'; // Import useNavigate
 import { createUser } from '../endpoints/auth';
 
 const Signup = () => {
+  const useLocation = useLocation();
+  const from = useLocation.state?.from || '/';
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -32,7 +34,7 @@ const Signup = () => {
 
       // Redirect to the homepage after a short delay
       setTimeout(() => {
-        navigate('/');
+        navigate(from);
       }, 1000);
     } catch (err) {
       let message = 'Email alreay used. Please try new email.';

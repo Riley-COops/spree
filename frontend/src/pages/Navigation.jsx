@@ -54,7 +54,7 @@ const Navigation = () => {
             <Link to="#" className="hover:text-gray-400 transition-colors duration-200">Order</Link>
           </li>
           <li>
-            <Link to="#" className="hover:text-gray-400 transition-colors duration-200">Notification</Link>
+            <Link to="/profile" className="hover:text-gray-400 transition-colors duration-200">Profile</Link>
           </li>
           {isLoggedIn ? (
             <li>
@@ -94,8 +94,8 @@ const Navigation = () => {
             </Link>
           </li>
           <li>
-            <Link to="#" onClick={toggleDropdown} className="flex items-center gap-2 hover:text-gray-400 transition-colors duration-200">
-              <FaBell /> Notification
+            <Link to="/profile" onClick={toggleDropdown} className="flex items-center gap-2 hover:text-gray-400 transition-colors duration-200">
+              <FaBell /> Profile
             </Link>
           </li>
           {isLoggedIn ? (

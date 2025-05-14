@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom'; // <-- import this
+import { useNavigate,useLocation, Link } from 'react-router-dom'; // <-- import this
 import { loginUser } from '../endpoints/auth';
 
 const Login = () => {
+  const location = useLocation();
+  const from = location.state?.from || '/';
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -26,7 +28,7 @@ const Login = () => {
       
         setSuccess('Login successful! Redirecting...');
         setTimeout(() => {
-          navigate('/');
+          navigate(from);
         }, 1000);
       } catch (err) {
         console.error('Login failed:', err.message);
